@@ -3,6 +3,9 @@
   "displayName": "Code Tanks",
   "description": "Mini VSC game which uses your code files as map that you can destroy using tank",
   "version": "0.0.1",
+  "publisher": "code-tanks",
+  "license": "MIT",
+  "private": true,
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -10,14 +13,19 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:code-tanks.runCodeTanks"
+    "onCommand:code-tanks.runGame",
+    "onCommand:code-tanks.runCodeTanksWithCurrentFile"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "code-tanks.runCodeTanks",
-        "title": "Run Code Tanks Game"
+        "command": "code-tanks.runGame",
+        "title": "Run Code Tanks game test"
+      },
+      {
+        "command": "code-tanks.runCodeTanksWithCurrentFile",
+        "title": "Run Code Tanks game with current file"
       }
     ]
   },
