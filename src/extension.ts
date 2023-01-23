@@ -1,44 +1,26 @@
-import * as vscode from 'vscode';
-import * as tanks from 'tanks';
+import { ExtensionContext, ViewColumn, commands, window, workspace } from 'vscode';
+import ContentProvider, {encodeLocation} from './provider';
 
-export function activate({subscriptions}: vscode.ExtensionContext) {
-	
-	const myScheme = 'code-tanks';
+export function activate({subscriptions}: ExtensionContext) {
 
-	const myProvider = new class implements vscode.TextDocumentContentProvider {
-		onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
-		onDidChange = this.onDidChangeEmitter.event;
-		
-		provideTextDocumentContent(uri: vscode.Uri): string {
-			return uri.path;
-		}
-	};
+	const provider = new ContentProvider();
 
-	subscriptions.push(vscode.workspace.registerTextDocumentContentProvider(myScheme, myProvider));
+	const providerRegistration = workspace.registerTextDocumentContentProvider(ContentProvider.scheme, provider);
 
-	subscriptions.push(vscode.commands.registerCommand('code-tanks.runGame', async () => {
+	const commandRegistration = commands.registerTextEditorCommand('code-tanks.runGame', async editor => {
+		const currentUri = editor.document.uri;
+		const targetUri = encodeLocation(currentUri);
 
-		if(!vscode.workspace.workspaceFolders || !vscode.window.activeTextEditor) {
-			vscode.window.showErrorMessage('No active text editor');
+		const doc = await workspace.openTextDocument(targetUri);
 
-			return;
-		}
+		return await window.showTextDocument(doc, ViewColumn.One);
+	});
 
-		const { document } = vscode.window.activeTextEditor;
-
-		if (document.uri.scheme !== myScheme) {
-			vscode.window.showErrorMessage('Invalid text editor scheme');
-
-			return;
-		}
-
-		const uri = vscode.Uri.parse(document.fileName);
-
-		const openedDocument = await vscode.workspace.openTextDocument(uri.with({ scheme: 'untitled' }));
-		const showDocument = vscode.window.showTextDocument(openedDocument);
-
-		return showDocument;			
-	}));
+	subscriptions.push(
+		provider,
+		providerRegistration,
+		commandRegistration,
+	);
 }
 
 export function deactivate() {}
