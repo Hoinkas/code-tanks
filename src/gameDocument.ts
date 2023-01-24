@@ -2,6 +2,7 @@ export default class GameDocument {
   private _text: string = '';
   private _lines: string[] = [];
   private _matrix: string[][] = [];
+  private _lenghtOfLand: number = 7;
 
   constructor(previousFile: Uint8Array){
     this.rotateFileText(previousFile);
@@ -21,29 +22,28 @@ export default class GameDocument {
   private _fileTextTo2DTable(file: Uint8Array) {
     this._text = file.toString();
     this._lines = this._text.split('\n');
-    const lines = this._lines.map((line) => line.replace('\t', '    ',).replace('\r', ' ').split(''));
+    const lines = this._lines.map((line) => line.replace('\t', '    ',).replace('\r', '').replace('\n', '').split(''));
 
     lines.forEach(line => {
-      this._matrix.push(line,line,line);
+      for (let i = 0; i < this._lenghtOfLand; i++){
+        this._matrix.push(line);
+      }
     });
   }
 
   private _turn2DTableToMatrix() {
     let maxLenght = Math.max(...this._matrix.map(i => i.length));
 
-    const matrix = Array.from({length: maxLenght}, () => Array.from({length: maxLenght}, () => ' '));
-
-    matrix.forEach((_, rowIndex) => {      
-      matrix[rowIndex].forEach((_, columnIndex) => {
-        if (this._matrix[rowIndex]){
-          matrix[rowIndex][columnIndex] =  this._matrix[rowIndex][columnIndex] || ' ';
+    for (let i = 0; i < this._matrix.length; i++){
+      for (let j = 0; j < maxLenght; j++)
+      {
+        if (this._matrix[i]){
+          this._matrix[i][j] =  this._matrix[i][j] || ' ';
         } else {
-          matrix[rowIndex][columnIndex] = ' ';
+          this._matrix[i][j] = ' ';
         }
-      });
-    });
-
-    this._matrix = matrix;
+      }
+    }
   }
 
   private _rotateMatrix90Clockwise() {

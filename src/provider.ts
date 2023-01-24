@@ -1,4 +1,4 @@
-import { Disposable, Event, EventEmitter, TextDocumentContentProvider, Uri, workspace } from 'vscode';
+import { Disposable, Event, EventEmitter, TextDocumentContentProvider, Uri, window, workspace } from 'vscode';
 import GameDocument from './gameDocument';
 
 export default class ContentProvider implements TextDocumentContentProvider {
@@ -26,7 +26,6 @@ export default class ContentProvider implements TextDocumentContentProvider {
   async provideTextDocumentContent(uri: Uri): Promise<string> {
     const originUri = decodeLocation(uri);
     const originTextFile = await workspace.fs.readFile(originUri);
-
     this._document = new GameDocument(originTextFile);
     
     return this._document.text;
