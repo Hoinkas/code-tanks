@@ -13,19 +13,14 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:code-tanks.runGame",
-    "onCommand:code-tanks.runCodeTanksWithCurrentFile"
+    "onCommand:code-tanks.runGame"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "code-tanks.runGame",
-        "title": "Run Code Tanks game test"
-      },
-      {
-        "command": "code-tanks.runCodeTanksWithCurrentFile",
-        "title": "Run Code Tanks game with current file"
+        "title": "Run Code Tanks"
       }
     ]
   },

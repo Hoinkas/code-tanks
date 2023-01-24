@@ -4,27 +4,52 @@ export default class GameDocument {
   private _matrix: string[][] = [];
 
   constructor(previousFile: Uint8Array){
-    this.transposeFileText(previousFile);
+    this.rotateFileText(previousFile);
   }
 
   get text(): string {    
     return this._text;
   }
 
-  private async transposeFileText(previousFile: Uint8Array): Promise<void> {
-    this._fileTextToMatrix(previousFile);
-    this._transposeMatrix();
+  private async rotateFileText(previousFile: Uint8Array): Promise<void> {
+    this._fileTextTo2DTable(previousFile);
+    this._turn2DTableToMatrix();
+    this._rotateMatrix90Clockwise();
     this._matrixToString();
   }
 
-  private _fileTextToMatrix(file: Uint8Array) {
+  private _fileTextTo2DTable(file: Uint8Array) {
     this._text = file.toString();
     this._lines = this._text.split('\n');
-    this._matrix = this._lines.map((line) => line.split(''));
+    const lines = this._lines.map((line) => line.replace('\t', '    ',).replace('\r', ' ').split(''));
+
+    lines.forEach(line => {
+      this._matrix.push(line,line,line);
+    });
   }
 
-  private _transposeMatrix() {
-    this._matrix = this._matrix[0].map((_, i) => this._matrix.map(row => row[i]));
+  private _turn2DTableToMatrix() {
+    let maxLenght = Math.max(...this._matrix.map(i => i.length));
+
+    const matrix = Array.from({length: maxLenght}, () => Array.from({length: maxLenght}, () => ' '));
+
+    matrix.forEach((_, rowIndex) => {      
+      matrix[rowIndex].forEach((_, columnIndex) => {
+        if (this._matrix[rowIndex]){
+          matrix[rowIndex][columnIndex] =  this._matrix[rowIndex][columnIndex] || ' ';
+        } else {
+          matrix[rowIndex][columnIndex] = ' ';
+        }
+      });
+    });
+
+    this._matrix = matrix;
+  }
+
+  private _rotateMatrix90Clockwise() {
+    if(this._matrix && this._matrix[0]) {
+      this._matrix = this._matrix[0].map((_, colIndex) => this._matrix.map(row => row[row.length-1-colIndex]));
+    }
   }
 
   private _matrixToString() {
