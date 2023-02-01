@@ -9,7 +9,8 @@ export function activate({subscriptions}: ExtensionContext) {
 
 	const commandRegistration = commands.registerTextEditorCommand('code-tanks.runGame', async editor => {
 		const currentUri = editor.document.uri;
-		const targetUri = encodeLocation(currentUri);
+		const currentPostion = editor.selection.active;
+		const targetUri = encodeLocation(currentUri, currentPostion);
 
 		const doc = await workspace.openTextDocument(targetUri);
 
