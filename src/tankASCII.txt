@@ -1,3 +1,6 @@
+Instructions:
+X means the starting point of shoot 
+
 ---------------
 East
  ["""]===X
@@ -19,4 +22,3 @@ West
 X===["""]
    (0.0.0)
 ---------------
-
