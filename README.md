@@ -18,7 +18,7 @@ Extension allows to run game in virtual document, which doesn't interefee with o
 First implementation of game. Running extension and creating map from selected code in file.
 Adding gamer's tank at cursor location at highest point.
 
-![ASCII tank on top of building made from letters between another buildings](https://github.com/Hoinkas/CodeTanks/blob/main/screenshotsTank_on_clockwise_rotated_map_0.0.1.ppg?raw=true)
+![ASCII tank on top of building made from letters between another buildings](https://github.com/Hoinkas/code-tanks/tree/main/screenshots/Tank_on_clockwise_rotated_map_0.0.1.png?raw=true)
 
 ---
 ## Planned features
