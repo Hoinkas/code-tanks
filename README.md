@@ -1,6 +1,6 @@
 # Code Tanks Game README
 
-Game which allow you to destroy your current code file with tanks and explosions.
+Visual Studio Code Extension which allow you to run Code Tanks game and destroy your current code file with tanks and explosions.
 
 ## How to run
 
@@ -14,8 +14,8 @@ Extension allows to run game in virtual document, which doesn't interefee with o
 ---
 ## Known Issues
 
-- When file is not selected there is no information why game won't load. Selecting file is necessary to run game thus error message is needed.
-- When tank is generated it can overwrite walls. Necessarly to block tank generating in narrow spaces or increase lenght of the land. When tank is generated near the wall let tank face another direction.
+1. When file is not selected there is no information why game won't load. Selecting file is necessary to run game thus error message is needed.
+2. When tank is generated it can overwrite walls. Necessarly to block tank generating in narrow spaces or increase lenght of the land. When tank is generated near the wall let tank face another direction.
 
 ## Release Notes
 
