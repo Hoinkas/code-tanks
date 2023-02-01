@@ -2,6 +2,11 @@
 
 Game which allow you to destroy your current code file with tanks and explosions.
 
+## How to run
+
+Go to file you where you want to run game. Open Keyboard Pallete (Ctrl+Shift+P),search for Run Code Tanks and run it.
+Enjoy!
+
 ## Features
 
 Extension allows to run game in virtual document, which doesn't interefee with original file. It create map from selected file's code and put mini tank in it which you can move and shoot at your code making damage to it.
