@@ -31,6 +31,7 @@ Adding gamer's tank at cursor location at highest point.
 Modeled first version of ASCII tank pointing east, west, north-east, north-west
 
 ![ASCII tank on top of building made from letters between another buildings](https://github.com/Hoinkas/code-tanks/tree/main/screenshots/tank_on_vertical_map_0.0.1.png?raw=true)
+
 ![Tank models](https://github.com/Hoinkas/code-tanks/tree/main/screenshots/tank_models_0.0.1.png?raw=true)
 
 ### [0.0.2]

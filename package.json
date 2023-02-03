@@ -2,7 +2,7 @@
   "name": "code-tanks",
   "displayName": "Code Tanks",
   "description": "Mini VSC game which uses your code files as map that you can destroy using tank",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "code-tanks",
   "license": "MIT",
   "private": true,
