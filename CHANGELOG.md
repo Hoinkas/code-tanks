@@ -30,11 +30,11 @@ First implementation of game. Running extension and creating map from selected c
 Adding gamer's tank at cursor location at highest point.
 Modeled first version of ASCII tank pointing east, west, north-east, north-west
 
-![ASCII tank on top of building made from letters between another buildings](https://github.com/Hoinkas/code-tanks/tree/main/screenshots/Tank_on_vertical_map_0.0.1.png?raw=true)
+![ASCII tank on top of building made from letters between another buildings](https://github.com/Hoinkas/code-tanks/tree/main/screenshots/tank_on_vertical_map_0.0.1.png?raw=true)
 ![Tank models](https://github.com/Hoinkas/code-tanks/tree/main/screenshots/tank_models_0.0.1.png?raw=true)
 
 ### [0.0.2]
 Added horizontal map rendering (without turning clockwise).
 It's now possible to switch between horizontal and vertical version of map via Code Tank settings (Map Render)
 
-![ASCII tank on top of line of code](https://github.com/Hoinkas/code-tanks/tree/main/screenshots/Tank_on_horizontal_map_0.0.2.png?raw=true)
+![ASCII tank on top of line of code](https://github.com/Hoinkas/code-tanks/tree/main/screenshots/tank_on_horizontal_map_0.0.2.png?raw=true)
