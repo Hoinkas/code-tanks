@@ -12,9 +12,6 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:code-tanks.runGame"
-  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -22,7 +19,21 @@
         "command": "code-tanks.runGame",
         "title": "Run Code Tanks"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Code Tanks",
+      "properties": {
+        "map.renderDirection":{
+          "type": "string",
+          "default": "Horizontal",
+          "enum": ["Horizontal", "Vertical"],
+          "enumDescriptions": [
+            "Map is rendered from code file without changing it",
+            "Map is rendered from code file rotated 90 degrees clockwise"
+          ]
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

@@ -1,15 +1,15 @@
-import { Position, window } from "vscode";
+import { Position, workspace } from "vscode";
 import Tank from "./tank";
+import { MapDirection } from "./settingsTypes";
 
 export default class GameMap {
   private _text: string = '';
-  private _map: string[][] = [];
-  private _lenghtOfLand: number = 0;
+  private _map: string[][] = [['']];
   private _cursorPosition: Position = new Position(0,0);
   private _tank: Tank = new Tank(this._cursorPosition);
+  private _mapDirection: MapDirection = 'Horizontal';
 
   constructor(previousFile: Uint8Array, cursorPosition: Position){
-    this._lenghtOfLand = this._tank.bottomPartWidth;
     this._cursorPosition = cursorPosition;
 
     this._generateMapFromTextFile(previousFile);
@@ -22,12 +22,27 @@ export default class GameMap {
     return this._text;
   }
 
+  // MAP RENDERING
   private async _generateMapFromTextFile(previousFile: Uint8Array): Promise<void> {
     this._fileTextToMap(previousFile);
     this._addGamerTankSymbolToMapByCursorPosition();
-    this._multiplyMapLandByLenghtOfLand();
-    this._fillEmptyMapPlacesWithSky();
-    this._rotateMapClockwise();
+
+    this._setAndWatchCurrentRenderDirectionFromSettins();
+
+    this._rotateMapAndOrFillWithSky(); 
+  }
+
+  private _setAndWatchCurrentRenderDirectionFromSettins() {
+    const settings = workspace.getConfiguration('map');
+    this._mapDirection = settings.get('renderDirection');
+
+    workspace.onDidChangeConfiguration(event => {
+      let affected = event.affectsConfiguration('renderDirection');
+
+      if (affected) {
+        this._mapDirection = settings.get('renderDirection');
+      }
+    });
   }
 
   private _fileTextToMap(file: Uint8Array) {
@@ -39,15 +54,37 @@ export default class GameMap {
   private _addGamerTankSymbolToMapByCursorPosition() {
     const positionLineIndex = this._cursorPosition.line;
     const lenghtOfSelectedLineOnMap = this._map[positionLineIndex].length;
+    let renderPosition = lenghtOfSelectedLineOnMap;
 
-    this._map[positionLineIndex][lenghtOfSelectedLineOnMap + 1] = '@';
+    if(lenghtOfSelectedLineOnMap > 0){
+      renderPosition++;
+    }
+
+    this._map[positionLineIndex][renderPosition] = '@';
   }
 
-  private _multiplyMapLandByLenghtOfLand(){
+  private _rotateMapAndOrFillWithSky() {
+    const isVertical = this._mapDirection === 'Vertical';
+
+    if(isVertical){
+      this._multiplyMapLandByLengthOfTankBottom();
+    }
+
+    this._fillEmptyMapPlacesWithSky();
+
+    if(isVertical){
+      this._rotateMapClockwise();
+    }
+  }
+
+  // MAP RENDERING - MAP ROTATION
+  private _multiplyMapLandByLengthOfTankBottom(){
+    const lenghtOfLand = this._tank.bottomPartWidth;
+
     const newMap: string[][] = [];
 
     this._map.forEach(line => {
-      for (let i = 0; i < this._lenghtOfLand; i++){
+      for (let i = 0; i < lenghtOfLand; i++){
         newMap.push(line);
       }
     });
@@ -77,28 +114,31 @@ export default class GameMap {
     }
   }
 
+  // TANKS RENDERING
   private _addTanksToMap() {
-    this._fixGamerTankPositionByTankSymbolPosition();
-    this._renderGamerTankOnMap();
+    if (this._map.length >= 2){
+      this._moveGamerTankPositionToTankSymbolPosition();
+      this._renderGamerTank();
+    }
   }
 
-  private _fixGamerTankPositionByTankSymbolPosition() {
+  private _moveGamerTankPositionToTankSymbolPosition() {
     this._tank.positionYAxis = this._map.findIndex(row => {
       const columnIndexTemp = row.indexOf('@');
 
       if(columnIndexTemp !== -1){
         this._tank.positionXAxis = columnIndexTemp;
+
         return true;
       }
-
       return false;
     });
   }
 
-  private _renderGamerTankOnMap() {
+  private _renderGamerTank() {
     const tankLeftBottomPosition = this._tank.leftBottomPosition;
-    const lineIndex = tankLeftBottomPosition.line;
-    const characterIndex = tankLeftBottomPosition.character;
+    const lineIndex = tankLeftBottomPosition.line - 1;
+    const characterIndex = tankLeftBottomPosition.character - 1;
 
     const tankModel = this._tank.model;
     const tankWidth = this._tank.width;
@@ -106,16 +146,16 @@ export default class GameMap {
 
     for (let i = characterIndex; i < characterIndex + tankHeight; i++){
       for (let j = lineIndex; j < lineIndex + tankWidth; j ++){
-        if(this._map[i] && this._map[i][j]){
-          this._map[i][j] = tankModel[i-characterIndex][j-lineIndex] || ' ';
+        if(!this._map[i]) {
+          this._map[i] = [];
         }
-        else {
-          this._map[i-characterIndex][j-lineIndex] = tankModel[i-characterIndex][j-lineIndex] || ' ';
-        }
+
+        this._map[i][j] = tankModel[i-characterIndex][j-lineIndex] || ' ';
       }
     }
   }
 
+  // MAP RETURN
   private _mapToString() {
     const mapLines = this._map.map((row) => row.join(''));
     this._text = mapLines.join('\n');

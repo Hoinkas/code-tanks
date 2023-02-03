@@ -1,0 +1,1 @@
+export type MapDirection = 'Vertical' | 'Horizontal' | undefined;
